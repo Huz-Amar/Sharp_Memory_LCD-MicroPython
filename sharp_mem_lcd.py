@@ -8,18 +8,21 @@ class SharpMemLCD:
     '''
     CS = "C4"
     DISP = "A7"
+    XDIM = 144
+    YDIM = 168
+    CHANNEL = 2
 
     def __init__(self):
         # define pins
-        self.spi = SPI(2, SPI.MASTER, prescaler=4, polarity=0, phase=0, firstbit=SPI.LSB)
+        self.spi = SPI(self.CHANNEL, SPI.MASTER, prescaler=4, polarity=0, phase=0, firstbit=SPI.LSB)
         self.cs = Pin(self.CS, Pin.OUT_PP)
-        self.cs.value(0)
+        self.set_cs(0)
         self.disp = Pin(self.DISP, Pin.OUT_PP)
         self.disp.value(1)
 
         # define structures, related info
-        self.xdim = 144
-        self.ydim = 168
+        self.xdim = self.XDIM
+        self.ydim = self.YDIM
         self.buffer = bytearray((self.xdim//8) * self.ydim)
         self.framebuffer = framebuf.FrameBuffer(self.buffer, self.xdim, self.ydim, framebuf.MONO_HMSB)
         self.vcom = 2
